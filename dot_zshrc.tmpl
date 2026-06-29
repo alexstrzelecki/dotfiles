@@ -11,10 +11,6 @@ alias ls='ls -G'
 
 [ -f "$HOME/.atuin/bin/env" ] && . "$HOME/.atuin/bin/env"
 
-if command -v atuin &>/dev/null; then
-  eval "$(atuin init zsh)"
-fi
-
 alias gs="git status"
 alias dps="docker ps"
 alias la="ls -A"
@@ -143,6 +139,10 @@ fi
 {{- end }}
 
 [[ -f ~/.zshrc.bbg ]] && source ~/.zshrc.bbg
+
+if command -v atuin &>/dev/null; then
+  eval "$(atuin init zsh)"
+fi
 
 if command -v starship &>/dev/null; then
   eval "$(starship init zsh)"

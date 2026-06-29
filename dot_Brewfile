@@ -1,0 +1,10 @@
+brew "atuin"
+brew "fzf"
+brew "git"
+brew "mise"
+brew "starship"
+
+cask "alacritty"
+cask "font-iosevka"
+cask "hammerspoon"
+cask "keepassxc"

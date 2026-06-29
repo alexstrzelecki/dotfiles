@@ -1,6 +1,7 @@
 {{- $macHostType := get . "mac_host_type" | default "personal" -}}
 {{- $manageObsidian := get . "manage_obsidian" | default false -}}
 {{- if ne .chezmoi.os "darwin" }}
+.Brewfile
 .config/alacritty
 .hammerspoon
 .obsidian
