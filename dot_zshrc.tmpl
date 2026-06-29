@@ -104,7 +104,7 @@ bindkey '\eb'      _space_backward_word
 bindkey '\e\177'   _space_backward_kill_word
 bindkey '\e[3;3~'  _space_kill_word
 
-{{ if and (eq .chezmoi.os "darwin") (ne .mac_host_type "minimal") -}}
+{{ if and (eq .chezmoi.os "darwin") (ne (get . "mac_host_type" | default "personal") "minimal") -}}
 FPATH="/opt/homebrew/share/zsh/site-functions:$FPATH"
 autoload -Uz compinit && compinit
 

@@ -1,4 +1,5 @@
 [data]
+    git_name = "{{ promptString "Git name" }}"
     git_email = "{{ promptString "Git email address" }}"
 
 {{ if eq .chezmoi.os "darwin" -}}

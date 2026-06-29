@@ -1,8 +1,9 @@
+{{- $macHostType := get . "mac_host_type" | default "personal" -}}
 {{- if ne .chezmoi.os "darwin" }}
 .config/alacritty
 .hammerspoon
 .obsidian
-{{- else if eq .mac_host_type "minimal" }}
+{{- else if eq $macHostType "minimal" }}
 .config/alacritty
 .hammerspoon
 .obsidian
