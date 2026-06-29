@@ -1,13 +1,21 @@
-add_newline = false
-format = "$directory$character"
+add_newline = true
+format = "$directory$git_branch$git_status$character"
 
 [directory]
 home_symbol = "~"
-style = "fg:#00484F"
+style = "fg:#3a94c5"
 truncate_to_repo = false
 truncation_length = 6
 truncation_symbol = ".../"
 
+[git_branch]
+format = " [$branch]($style)"
+style = "fg:#35a77c"
+
+[git_status]
+format = " [$all_status$ahead_behind]($style)"
+style = "fg:#dfa000"
+
 [character]
-success_symbol = "[>](bold #00484F)"
-error_symbol = "[>](bold red)"
+success_symbol = "[>](bold #8da101)"
+error_symbol = "[>](bold #f85552)"
