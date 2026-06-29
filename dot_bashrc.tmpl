@@ -1,8 +1,8 @@
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 
-source ~/.lcldevrc
+[ -f "$HOME/.lcldevrc" ] && . "$HOME/.lcldevrc"
 
-. "$HOME/.atuin/bin/env"
+[ -f "$HOME/.atuin/bin/env" ] && . "$HOME/.atuin/bin/env"
 
 alias gs="git status"
 alias dps="docker ps"
@@ -18,9 +18,15 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 
+{{ if eq .chezmoi.os "darwin" -}}
+alias ls='ls -G'
+alias df='df -h'
+alias topdisk='du -hd 1 | sort -hr | head -20'
+{{ else if eq .chezmoi.os "linux" -}}
 alias df='df -hT'
 alias free='free -h'
 alias topdisk='du -h --max-depth=1 | sort -rh | head -20'
+{{- end }}
 
 _prompt_pwd() {
   local path="${PWD/#$HOME/\~}"
@@ -42,12 +48,12 @@ _prompt_pwd() {
 }
 
 PS1='$(_prompt_pwd) \$ '
-. "$HOME/.cargo/env"
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
 [[ -f ~/.bashrc.bbg ]] && source ~/.bashrc.bbg
 
 # Shell integrations last — nothing after this should touch PROMPT_COMMAND or the DEBUG trap
-if command -v atuin &>/dev/null; then
+if command -v atuin &>/dev/null && [ -f "$HOME/.bash-preexec.sh" ]; then
   source ~/.bash-preexec.sh
   eval "$(atuin init bash)"
 fi

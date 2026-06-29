@@ -1,2 +1,8 @@
 [data]
     git_email = "{{ promptString "Git email address" }}"
+
+{{ if eq .chezmoi.os "darwin" -}}
+    mac_host_type = "{{ promptString "Mac host type (work, personal, minimal)" }}"
+{{ else if eq .chezmoi.os "linux" -}}
+    linux_host_type = "{{ promptString "Linux host type (server, workstation, minimal)" }}"
+{{ end -}}

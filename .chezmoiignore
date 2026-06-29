@@ -1,4 +1,9 @@
 {{- if ne .chezmoi.os "darwin" }}
 .config/alacritty
 .hammerspoon
+.obsidian
+{{- else if eq .mac_host_type "minimal" }}
+.config/alacritty
+.hammerspoon
+.obsidian
 {{- end }}

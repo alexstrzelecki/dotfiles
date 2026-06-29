@@ -1,13 +1,17 @@
-. "$HOME/.local/bin/env"
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 
-source ~/.lcldevrc
+[ -f "$HOME/.lcldevrc" ] && . "$HOME/.lcldevrc"
 
-. "$HOME/.atuin/bin/env"
-
-eval "$(atuin init zsh)"
-
+{{ if eq .chezmoi.os "darwin" -}}
 export CLICOLOR=1
 alias ls='ls -G'
+{{- end }}
+
+[ -f "$HOME/.atuin/bin/env" ] && . "$HOME/.atuin/bin/env"
+
+if command -v atuin &>/dev/null; then
+  eval "$(atuin init zsh)"
+fi
 
 alias gs="git status"
 alias dps="docker ps"
@@ -23,9 +27,14 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 
+{{ if eq .chezmoi.os "darwin" -}}
+alias df='df -h'
+alias topdisk='du -hd 1 | sort -hr | head -20'
+{{ else if eq .chezmoi.os "linux" -}}
 alias df='df -hT'
 alias free='free -h'
 alias topdisk='du -h --max-depth=1 | sort -rh | head -20'
+{{- end }}
 
 preexec() {
   print -Pn "\e]0;%~ · $1\a"
@@ -95,11 +104,13 @@ bindkey '\eb'      _space_backward_word
 bindkey '\e\177'   _space_backward_kill_word
 bindkey '\e[3;3~'  _space_kill_word
 
-{{ if eq .chezmoi.os "darwin" -}}
+{{ if and (eq .chezmoi.os "darwin") (ne .mac_host_type "minimal") -}}
 FPATH="/opt/homebrew/share/zsh/site-functions:$FPATH"
 autoload -Uz compinit && compinit
 
-eval "$(fnm env --use-on-cd)"
+if command -v fnm &>/dev/null; then
+  eval "$(fnm env --use-on-cd)"
+fi
 {{- end }}
 
 [[ -f ~/.zshrc.bbg ]] && source ~/.zshrc.bbg
