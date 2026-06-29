@@ -11,7 +11,7 @@ hs.hotkey.bind({"cmd", "shift"}, "J", function() focusApp("IntelliJ IDEA") end)
 hs.hotkey.bind({"cmd", "shift"}, "K", function() focusApp("Slack") end)
 hs.hotkey.bind({"cmd", "shift"}, "G", function() focusApp("Obsidian") end)
 hs.hotkey.bind({"cmd", "shift"}, "Q", function() focusApp("Visual Studio Code") end)
-hs.hotkey.bind({"cmd", "shift"}, "W", function() focusApp("Passwords") end)
+hs.hotkey.bind({"cmd", "shift"}, "W", function() focusApp("KeePassXC") end)
 hs.hotkey.bind({"cmd", "shift"}, "I", function() focusApp("Finder") end)
 hs.hotkey.bind({"cmd", "shift"}, "7", function() focusApp("OmniFocus") end)
 
