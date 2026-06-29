@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+{{ if eq .chezmoi.os "linux" -}}
+set -euo pipefail
+
+TARBALL="{{ .chezmoi.sourceDir }}/bin/atuin-x86_64-unknown-linux-musl.tar.gz"
+INSTALL_DIR="$HOME/.atuin/bin"
+
+if command -v atuin &>/dev/null; then
+  echo "atuin already installed, skipping."
+  exit 0
+fi
+
+echo "Installing atuin..."
+mkdir -p "$INSTALL_DIR"
+tar xzf "$TARBALL" --strip-components=1 -C "$INSTALL_DIR" "atuin-x86_64-unknown-linux-musl/atuin"
+chmod +x "$INSTALL_DIR/atuin"
+
+cat > "$INSTALL_DIR/env" << 'ENVEOF'
+#!/bin/sh
+case ":${PATH}:" in
+    *:"$HOME/.atuin/bin":*)
+        ;;
+    *)
+        export PATH="$HOME/.atuin/bin:$PATH"
+        ;;
+esac
+ENVEOF
+{{- end }}

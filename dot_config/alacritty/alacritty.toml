@@ -1,0 +1,52 @@
+[window]
+opacity = 0.92
+decorations = "Full"
+decorations_theme_variant = "Dark"
+blur = false
+dynamic_title = true
+option_as_alt = "Both"   # "OnlyLeft", "OnlyRight", or "Both"
+
+padding = { x = 0, y = 5 }
+dynamic_padding = true
+
+[cursor]
+style = {shape = "Beam", blinking = "On"}
+blink_interval = 750
+thickness = 0.3
+
+[font]
+size = 13
+
+[font.normal]
+family = "Iosevka Fixed"
+style = "Light Extended"
+
+[font.bold]
+family = "Iosevka Fixed"
+style = "Semibold Extended"
+
+[font.italic]
+family = "Iosevka Fixed"
+style = "Light Extended Italic"
+
+[font.bold_italic]
+family = "Iosevka Fixed"
+style = "Semibold Extended Italic"
+
+[general]
+import = [
+    "~/.config/alacritty/themes/themes/everforest_light_medium.toml"
+]
+
+[keyboard]
+bindings = [
+{ key = "Tab",   mods = "Control",       action = "SelectNextTab" },
+{ key = "Tab",   mods = "Control|Shift", action = "SelectPreviousTab" },
+{ key = "Right", mods = "Alt",           chars = "\x1bf" },
+{ key = "Left",  mods = "Alt",           chars = "\x1bb" },
+{ key = "Z",     mods = "Command",       chars = "\x1a" },
+{ key = "Z",      mods = "Command|Shift", chars = "\x19" },
+{ key = "Delete", mods = "Alt",          chars = "\x1b[3;3~" },
+{ key = "Back",   mods = "Command",      chars = "\x15" },
+{ key = "Delete", mods = "Command",      chars = "\x15" },
+]

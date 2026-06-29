@@ -1,0 +1,105 @@
+. "$HOME/.local/bin/env"
+
+source ~/.lcldevrc
+
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh)"
+
+export CLICOLOR=1
+alias ls='ls -G'
+
+alias gs="git status"
+alias dps="docker ps"
+alias la="ls -A"
+alias ll='ls -lah'
+alias l='ls -CF'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ~='cd ~'
+alias mkdir='mkdir -pv'
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+
+alias df='df -hT'
+alias free='free -h'
+alias topdisk='du -h --max-depth=1 | sort -rh | head -20'
+
+preexec() {
+  print -Pn "\e]0;%~ · $1\a"
+}
+precmd() {
+  print -Pn "\e]0;%~\a"
+  print -Pn "\e[5 q"
+}
+
+setopt PROMPT_SUBST
+_prompt_pwd() {
+  local path="$PWD"
+
+  if [[ "$path" == "$HOME" || "$path" == "$HOME/"* ]]; then
+    local rel="${path#$HOME}"
+    if [[ -z "$rel" ]]; then
+      print -n "~"
+      return
+    fi
+    local -a parts=("${(@s:/:)rel}")
+    local depth=$(( ${#parts} - 1 ))
+    if (( depth <= 6 )); then
+      print -n "~${rel}"
+    else
+      print -n "~/.../${(j:/:)parts[-3,-1]}"
+    fi
+  else
+    local -a parts=("${(@s:/:)path}")
+    local depth=$(( ${#parts} - 1 ))
+    if (( depth <= 6 )); then
+      print -n "$path"
+    else
+      print -n "/${parts[2]}/.../${(j:/:)parts[-3,-1]}"
+    fi
+  fi
+}
+PROMPT='%F{#00484F}$(_prompt_pwd)%f %# '
+
+_space_forward_word() {
+    local WORDCHARS=$'`~!@#$%^&*()_=+[{]}\\|:\'"<>/?'
+    zle forward-word
+}
+zle -N _space_forward_word
+
+_space_backward_word() {
+    local WORDCHARS=$'`~!@#$%^&*()_=+[{]}\\|:\'"<>/?'
+    zle backward-word
+}
+zle -N _space_backward_word
+
+_space_backward_kill_word() {
+    local WORDCHARS=$'`~!@#$%^&*()_=+[{]}\\|:\'"<>/?'
+    zle backward-kill-word
+}
+zle -N _space_backward_kill_word
+
+_space_kill_word() {
+    local WORDCHARS=$'`~!@#$%^&*()_=+[{]}\\|:\'"<>/?'
+    zle kill-word
+}
+zle -N _space_kill_word
+
+bindkey '\ea'      beginning-of-line
+bindkey '\ee'      end-of-line
+bindkey '\ef'      _space_forward_word
+bindkey '\eb'      _space_backward_word
+bindkey '\e\177'   _space_backward_kill_word
+bindkey '\e[3;3~'  _space_kill_word
+
+{{ if eq .chezmoi.os "darwin" -}}
+FPATH="/opt/homebrew/share/zsh/site-functions:$FPATH"
+autoload -Uz compinit && compinit
+
+eval "$(fnm env --use-on-cd)"
+{{- end }}
+
+[[ -f ~/.zshrc.bbg ]] && source ~/.zshrc.bbg

@@ -1,0 +1,11 @@
+{
+    "AltUp": "lua:skip.skipUp",
+    "AltDown": "lua:skip.skipDown",
+    "Alt;": "MoveLinesUp",
+    "Alt'": "MoveLinesDown",
+    "AltBackspace": "DeleteWordLeft",
+    "AltDelete": "DeleteWordRight",
+    "CtrlU": "DeleteLine",
+    "Alta": "StartOfLine",
+    "Alte": "EndOfLine"
+}

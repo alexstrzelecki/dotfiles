@@ -1,0 +1,19 @@
+[user]
+	name = astrzelecki2
+	email = {{ .git_email }}
+
+[core]
+	excludesfile = ~/.gitignore_global
+
+[alias]
+	ci = commit -m
+	diff-all = "!f() { for name in $(git diff --name-only $1); do git difftool -y $1 $name & done; }; f"
+	diff-changes = diff --name-status
+	diff-stat = diff --stat --ignore-space-change
+	diff-staged = diff --cached
+	diff-upstream = "!git fetch origin && git diff HEAD origin/$(git rev-parse --abbrev-ref HEAD)"
+
+	mad = reset --hard HEAD
+
+[init]
+	defaultBranch = main

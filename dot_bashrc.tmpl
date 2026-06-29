@@ -1,0 +1,53 @@
+[ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
+
+source ~/.lcldevrc
+
+. "$HOME/.atuin/bin/env"
+
+alias gs="git status"
+alias dps="docker ps"
+alias la="ls -A"
+alias ll='ls -lah'
+alias l='ls -CF'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ~='cd ~'
+alias mkdir='mkdir -pv'
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+
+alias df='df -hT'
+alias free='free -h'
+alias topdisk='du -h --max-depth=1 | sort -rh | head -20'
+
+_prompt_pwd() {
+  local path="${PWD/#$HOME/\~}"
+  local depth
+  depth=$(tr -cd '/' <<< "$path" | wc -c)
+  if (( depth <= 6 )); then
+    printf '%s' "$path"
+  else
+    local last3
+    last3=$(sed 's|.*/\([^/]*/[^/]*/[^/]*\)$|\1|' <<< "$path")
+    local prefix
+    if [[ "$path" == "~"* ]]; then
+      prefix="~"
+    else
+      prefix="/$(cut -d'/' -f2 <<< "$path")"
+    fi
+    printf '%s' "${prefix}/.../${last3}"
+  fi
+}
+
+PS1='$(_prompt_pwd) \$ '
+. "$HOME/.cargo/env"
+
+[[ -f ~/.bashrc.bbg ]] && source ~/.bashrc.bbg
+
+# Shell integrations last — nothing after this should touch PROMPT_COMMAND or the DEBUG trap
+if command -v atuin &>/dev/null; then
+  source ~/.bash-preexec.sh
+  eval "$(atuin init bash)"
+fi

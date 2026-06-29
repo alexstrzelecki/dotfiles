@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+{{ if eq .chezmoi.os "linux" -}}
+set -euo pipefail
+
+if command -v apt-get &>/dev/null; then
+  echo "Installing bash-completion..."
+  apt-get install -y bash-completion
+fi
+{{- end }}
