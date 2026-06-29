@@ -1,3 +1,5 @@
+{{- $macHostType := get . "mac_host_type" | default "personal" -}}
+{{- $linuxHostType := get . "linux_host_type" | default "server" -}}
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 
 [ -f "$HOME/.lcldevrc" ] && . "$HOME/.lcldevrc"
@@ -36,6 +38,7 @@ alias free='free -h'
 alias topdisk='du -h --max-depth=1 | sort -rh | head -20'
 {{- end }}
 
+if ! command -v starship &>/dev/null; then
 preexec() {
   print -Pn "\e]0;%~ · $1\a"
 }
@@ -72,6 +75,7 @@ _prompt_pwd() {
   fi
 }
 PROMPT='%F{#00484F}$(_prompt_pwd)%f %# '
+fi
 
 _space_forward_word() {
     local WORDCHARS=$'`~!@#$%^&*()_=+[{]}\\|:\'"<>/?'
@@ -104,13 +108,42 @@ bindkey '\eb'      _space_backward_word
 bindkey '\e\177'   _space_backward_kill_word
 bindkey '\e[3;3~'  _space_kill_word
 
-{{ if and (eq .chezmoi.os "darwin") (ne (get . "mac_host_type" | default "personal") "minimal") -}}
+{{ if and (eq .chezmoi.os "darwin") (ne $macHostType "minimal") -}}
 FPATH="/opt/homebrew/share/zsh/site-functions:$FPATH"
 autoload -Uz compinit && compinit
+{{- end }}
 
-if command -v fnm &>/dev/null; then
+if command -v mise &>/dev/null; then
+  eval "$(mise activate zsh)"
+elif command -v fnm &>/dev/null; then
   eval "$(fnm env --use-on-cd)"
+fi
+
+[ -f "$HOME/.fzf.zsh" ] && . "$HOME/.fzf.zsh"
+
+{{ if or (and (eq .chezmoi.os "darwin") (eq $macHostType "personal")) (and (eq .chezmoi.os "linux") (eq $linuxHostType "workstation")) -}}
+if [ -d "$HOME/.bun" ]; then
+  export BUN_INSTALL="$HOME/.bun"
+  case ":$PATH:" in
+    *:"$BUN_INSTALL/bin":*) ;;
+    *) export PATH="$BUN_INSTALL/bin:$PATH" ;;
+  esac
+fi
+
+[ -s "$HOME/.bun/_bun" ] && . "$HOME/.bun/_bun"
+{{- end }}
+
+{{ if and (eq .chezmoi.os "darwin") (eq $macHostType "personal") -}}
+if [ -d "$HOME/.lmstudio/bin" ]; then
+  case ":$PATH:" in
+    *:"$HOME/.lmstudio/bin":*) ;;
+    *) export PATH="$PATH:$HOME/.lmstudio/bin" ;;
+  esac
 fi
 {{- end }}
 
 [[ -f ~/.zshrc.bbg ]] && source ~/.zshrc.bbg
+
+if command -v starship &>/dev/null; then
+  eval "$(starship init zsh)"
+fi

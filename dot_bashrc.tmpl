@@ -1,3 +1,5 @@
+{{- $macHostType := get . "mac_host_type" | default "personal" -}}
+{{- $linuxHostType := get . "linux_host_type" | default "server" -}}
 [ -f "$HOME/.local/bin/env" ] && . "$HOME/.local/bin/env"
 
 [ -f "$HOME/.lcldevrc" ] && . "$HOME/.lcldevrc"
@@ -28,6 +30,7 @@ alias free='free -h'
 alias topdisk='du -h --max-depth=1 | sort -rh | head -20'
 {{- end }}
 
+if ! command -v starship &>/dev/null; then
 _prompt_pwd() {
   local path="${PWD/#$HOME/\~}"
   local depth
@@ -48,9 +51,40 @@ _prompt_pwd() {
 }
 
 PS1='$(_prompt_pwd) \$ '
+fi
+
 [ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
+[ -f "$HOME/.fzf.bash" ] && . "$HOME/.fzf.bash"
+
+if command -v mise &>/dev/null; then
+  eval "$(mise activate bash)"
+fi
+
+{{ if or (and (eq .chezmoi.os "darwin") (eq $macHostType "personal")) (and (eq .chezmoi.os "linux") (eq $linuxHostType "workstation")) -}}
+if [ -d "$HOME/.bun" ]; then
+  export BUN_INSTALL="$HOME/.bun"
+  case ":$PATH:" in
+    *:"$BUN_INSTALL/bin":*) ;;
+    *) export PATH="$BUN_INSTALL/bin:$PATH" ;;
+  esac
+fi
+{{- end }}
+
+{{ if and (eq .chezmoi.os "darwin") (eq $macHostType "personal") -}}
+if [ -d "$HOME/.lmstudio/bin" ]; then
+  case ":$PATH:" in
+    *:"$HOME/.lmstudio/bin":*) ;;
+    *) export PATH="$PATH:$HOME/.lmstudio/bin" ;;
+  esac
+fi
+{{- end }}
+
 [[ -f ~/.bashrc.bbg ]] && source ~/.bashrc.bbg
+
+if command -v starship &>/dev/null; then
+  eval "$(starship init bash)"
+fi
 
 # Shell integrations last — nothing after this should touch PROMPT_COMMAND or the DEBUG trap
 if command -v atuin &>/dev/null && [ -f "$HOME/.bash-preexec.sh" ]; then

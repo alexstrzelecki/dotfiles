@@ -1,0 +1,13 @@
+add_newline = false
+format = "$directory$character"
+
+[directory]
+home_symbol = "~"
+style = "fg:#00484F"
+truncate_to_repo = false
+truncation_length = 6
+truncation_symbol = ".../"
+
+[character]
+success_symbol = "[>](bold #00484F)"
+error_symbol = "[>](bold red)"
