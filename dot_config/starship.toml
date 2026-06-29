@@ -1,5 +1,5 @@
 add_newline = true
-format = "$directory$git_branch$git_status$character"
+format = "$directory$git_branch$git_status$python$character"
 
 [directory]
 home_symbol = "~"
@@ -15,6 +15,15 @@ style = "fg:#35a77c"
 [git_status]
 format = " [$all_status$ahead_behind]($style)"
 style = "fg:#dfa000"
+
+[python]
+format = " [${symbol}${version}]($style)"
+style = "fg:#df69ba"
+symbol = "py "
+python_binary = ["./.venv/bin/python", "python", "python3"]
+detect_extensions = ["py"]
+detect_files = ["pyproject.toml", "uv.lock", "requirements.txt", "setup.py", "tox.ini"]
+detect_folders = [".venv"]
 
 [character]
 success_symbol = "[>](bold #8da101)"
