@@ -1,6 +1,7 @@
 [data]
     git_name = "{{ promptString "Git name" }}"
     git_email = "{{ promptString "Git email address" }}"
+    manage_obsidian = {{ promptBool "Manage Obsidian settings" }}
 
 {{ if eq .chezmoi.os "darwin" -}}
     mac_host_type = "{{ promptString "Mac host type (work, personal, minimal)" }}"
