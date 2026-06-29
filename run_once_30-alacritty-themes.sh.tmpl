@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+{{- $macHostType := get . "mac_host_type" | default "personal" }}
+{{ if and (eq .chezmoi.os "darwin") (ne $macHostType "minimal") -}}
+set -euo pipefail
+
+THEME_DIR="$HOME/.config/alacritty/themes"
+THEME_REPO="https://github.com/alacritty/alacritty-theme.git"
+
+if [ -d "$THEME_DIR/.git" ]; then
+  git -C "$THEME_DIR" pull --ff-only
+elif [ -e "$THEME_DIR" ]; then
+  echo "$THEME_DIR exists but is not a git checkout; leaving it unchanged." >&2
+  exit 0
+else
+  git clone --depth 1 "$THEME_REPO" "$THEME_DIR"
+fi
+{{- end }}
